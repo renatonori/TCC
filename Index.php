@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<?php 
+
+?>
 <html>
 <head>
 	<title>Login Admin</title>
@@ -68,17 +71,15 @@
 </head>
 
 <body>
-		<?php
-			echo("ola mundo");
-		?>
 	<boxTitle>
 		<img src="leaf.png">
 		<boxForm>
-			<form name="form1"  METHOD="post" ACTION="pagina.php?v=12345">
+			<form name="form1"  METHOD="post" ACTION="bemvindo.php">
 				<input id="login" type="text" name="login" size="25" placeholder = "Login">
 				<input id="senha" type="text" name="senha" size="25" placeholder = "Senha">
+				<button id="submitButton" type="submit" value="click">Logar</button>
 			</form>
-			<button id="submitButton" type="submit" form="form1" value="Submit">Logar</button>
+			
 		</boxForm>
 	</boxTitle>
 
