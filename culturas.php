@@ -27,7 +27,7 @@ base de dados: control_tccnori -->
 		echo "sessao iniciada";
 	}
 	else{
-		
+		echo "doNothing";
 	}
 ?>
 

@@ -1,7 +1,4 @@
 <!DOCTYPE html>
-<?php 
-
-?>
 <html>
 <head>
 	<title>Login Admin</title>
@@ -76,10 +73,9 @@
 		<boxForm>
 			<form name="form1"  METHOD="post" ACTION="bemvindo.php">
 				<input id="login" type="text" name="login" size="25" placeholder = "Login">
-				<input id="senha" type="text" name="senha" size="25" placeholder = "Senha">
+				<input id="senha" type="password" name="senha" size="25" placeholder = "Senha">
 				<button id="submitButton" type="submit" value="click">Logar</button>
 			</form>
-			
 		</boxForm>
 	</boxTitle>
 

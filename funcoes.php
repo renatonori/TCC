@@ -21,43 +21,15 @@ function conecta()
 	}
 	
 	return $conexao;
+
 }
 function desconecta($conexao)
 {
 	mysql_close($conexao);
 }
-function criaSessao()
-{
-
-	$login = $_POST['login'];
-	$senha = $_POST['senha'];
-	$sql = "SELECT *
-	FROM usuario
-	WHERE usuario_login = '$login'
-	AND usuario_password = '$senha'";
-
-	$socket = conecta();
-	if(!$socket)
-	{
-		desconecta($socket);
-		header('location:index.php');
-	}
-	$resultado = mysql_query($sql,$socket);
-
-
-	if (mysql_num_rows ($resultado) > 0) 
-	{
-    // session_start inicia a sessão
-    session_start();
-     
-    $_SESSION['login'] = $login;
-    $_SESSION['senha'] = $senha;
-	desconecta($socket);
-    return 1;
-
-	}
-	desconecta($socket);
-	header('location:index.php');
-}
-
 ?>
+
+
+
+
+
