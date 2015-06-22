@@ -1,6 +1,61 @@
+<?php
+error_reporting(0);
+ini_set(“display_errors”, 0 );
+	include "funcoes.php";
+
+	$refresh = false;
+		if( $_SERVER['REQUEST_METHOD']=='POST' )
+	{
+		$request = md5( implode( $_POST ) );
+		
+		if( isset( $_SESSION['last_request'] ) && $_SESSION['last_request']== $request )
+		{
+			$refresh = true;
+		}
+		else
+		{
+			$_SESSION['last_request']  = $request;
+			$refresh = false;
+		}
+	}
+	if($refresh == false){
+		$login = $_POST['login'];
+		$senha = $_POST['senha'];
+
+		$sql = "SELECT *
+		FROM usuario
+		WHERE usuario_login = '$login'
+		AND usuario_password = '$senha'";
+
+		$socket = conecta();
+		if(!$socket)
+		{
+			desconecta($socket);
+			header('location:index.php');
+
+		}
+		$resultado = mysql_query($sql,$socket);
+
+
+		if (mysql_num_rows ($resultado) > 0) 
+		{
+	    // session_start inicia a sessão
+	    session_start();
+	    
+		$_SESSION['login'] = $login;
+		$_SESSION['senha'] = $senha;
+		desconecta($socket);
+
+		}else{
+			header('location:index.php');
+			session_destroy();
+		}
+	}
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<script src="jquery-2.1.4.js" type="text/javascript"></script> 
 	<script src="javascript.js" type="text/javascript"></script> 
@@ -14,7 +69,7 @@
 		font-family: "Verdana", Sans, serif;
 	}
 	.principal {
-		height: 40px;
+		height: 64px;
 		margin-top: -16px;
 		background: #31637D;
 		margin-bottom: 30px;
@@ -76,7 +131,7 @@
 	    height: 100%;
 	    z-index:99;
 	    background-color: rgba(0,0,0,0.75);
-	
+	text-align: center ;
 	}
 	#editaRemoveCultura{
 		position: fixed;
@@ -87,13 +142,14 @@
 	    height: 100%;
 	    z-index:99;
 	    background-color: rgba(0,0,0,0.75);
+	    text-align: center ;
 	}
 	boxTitle 
 	{
 		display:block;
 		background-color:#ddd;
-	    width: 350px;
-	    height: 500px;
+	    width: 300px;
+	    height: 350px;
 	    font-size: 12px;
 	    border: none;
 	    position: absolute;
@@ -111,10 +167,10 @@
 	} 
 	boxTitleRemove
 	{
-				display:block;
+		display:block;
 		background-color:#ddd;
-	    width: 350px;
-	    height: 500px;
+	    width: 300px;
+	    height: 350px;
 	    font-size: 12px;
 	    border: none;
 	    position: absolute;
@@ -136,43 +192,43 @@
 	<div id = "adicionarCultura">
 		<boxTitle>
 			<label id="titleAdicionar">Adicionar Cultura</label><br>
-			<form METHOD="post" ACTION="" id = "bemvindo.php">
-				<input id = "imageURL" type="text" name="imgUrl" placeholder = "Imagem URL">
-				<input id = "nome" type="text" name="nome" placeholder = "Nome">
-				<input id = "nomeCient" type="text" name="nomeCient" placeholder = "Nome Científico">
-				<input id = "data" type="text" name="data" placeholder = "Data de plantio">
-				<input id = "regiao" type="text" name="regiao"  placeholder = "Região de plantio">
-				<input id = "info" type="text" name="info" placeholder = "Informações adicionais"><br>
-				<input type="hidden" name="adicionar" value="true" />
-				<button id="submitButton" type="submit">Adicionar</button>
+			<form METHOD="post" ACTION="" id = "adicionarForm">
+				<input class="btn btn-default" id = "imageURL" type="text" name="imgUrl" placeholder = "Imagem URL"><br>
+				<input class="btn btn-default" id = "nome" type="text" name="nome" placeholder = "Nome"><br>
+				<input class="btn btn-default" id = "nomeCient" type="text" name="nomeCient" placeholder = "Nome Científico"><br>
+				<input class="btn btn-default" id = "data" type="text" name="data" placeholder = "Época de plantio"><br>
+				<input class="btn btn-default" id = "regiao" type="text" name="regiao"  placeholder = "Região de plantio"><br>
+				<input class="btn btn-default"  id = "info" type="text" name="info" placeholder = "Informações adicionais"><br><br>
+				<button class="btn btn-primary" id="submitButton" type="submit">Adicionar</button>
+				<button class="btn btn-danger" type="button" onclick="hideAdicionar()">Cancelar</button>
 			</form>
-			<button type="button" onclick="hideAdicionar()">Cancelar</button>
 		</boxTitle>
 	</div>
 
 	<div id = "editaRemoveCultura">
 		<boxTitleRemove>
 			<label id="titleAdicionar">Remover/Editar Cultura</label><br>
-			<form METHOD="post" ACTION="" id = "bemvindo.php">
-				<input id = "imageURLRemove" type="text" name="imgUrl" placeholder = "Imagem URL">
-				<input id = "nomeRemove" type="text" name="nome" placeholder = "Nome">
-				<input id = "nomeCientRemove" type="text" name="nomeCient" placeholder = "Nome Científico">
-				<input id = "dataRemove" type="text" name="data" placeholder = "Data de plantio">
-				<input id = "regiaoRemove" type="text" name="regiao"  placeholder = "Região de plantio">
-				<input id = "infoRemove" type="text" name="info" placeholder = "Informações adicionais">
-				<input id = "hiddenIndex" type="text">
-				<br>
-				<button id="deletar" name="deletar" type="submit" onClick="deletaOuRemove('1',hiddenIndex.value)">Deletar</button>
-				<button id="editar" name="editar" type="submit" onClick="deletaOuRemove('2',hiddenIndex.value)">Editar</button>
+			<form METHOD="post" ACTION="" id = "removeEditaForm">
+				<input class="btn btn-default" id = "imageURLRemove" type="text" name="imgUrl" placeholder = "Imagem URL">
+				<input class="btn btn-default" id = "nomeRemove" type="text" name="nome" placeholder = "Nome">
+				<input class="btn btn-default" id = "nomeCientRemove" type="text" name="nomeCient" placeholder = "Nome Científico">
+				<input class="btn btn-default" id = "dataRemove" type="text" name="data" placeholder = "Época de plantio">
+				<input class="btn btn-default" id = "regiaoRemove" type="text" name="regiao"  placeholder = "Região de plantio">
+				<input class="btn btn-default" id = "infoRemove" type="text" name="info" placeholder = "Informações adicionais">
+				<input class="btn btn-default" id = "hiddenIndex" name="index" type="text">
+				<br><br>
+				<button class="btn btn-primary" id="editar" name="editar" type="submit">Editar</button>
+				<button class="btn btn-warning" type="button" id="deletar" name="deletar" onClick="deletaOuRemove('1',hiddenIndex.value)">Deletar</button>
+				<button class="btn btn-danger" type="button" onclick="hideRemoveEditaCultura()">Cancelar</button>
 			</form>
-			<button type="button" onclick="hideRemoveEditaCultura()">Cancelar</button>
+			
 		</boxTitleRemove>
 	</div>
 
 	<div class="principal">
 		<ul id="menu_top">
-			<li><a href="./">Bem vindo:<?php echo($_POST['login']); ?></a></li>
+			<li><a href="./">Bem vindo:<?php echo($_SESSION['login']); ?></a></li>
 		</ul>
-		<button id = "logoutButton" type="button" onclick = ""><a href="./">Logout</a></button>
+		<button class="btn btn-danger" id = "logoutButton" type="button" onclick = ""><a href="./">Logout</a></button>
 		<button id = "adicionarButton" type="button" onclick = "showAdicionar()">Adicionar</button>
 	</div>

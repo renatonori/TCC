@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<title>Login Admin</title>
   	<script>
   		document.createElement("boxTitle")
@@ -16,7 +17,7 @@
   		{
     		display:block;
     		background-color:#ddd;
-		    width: 200px;
+		    width: 350px;
 		    padding: 50px;
 		    font-size: 30px;
 		    text-align: center;
@@ -72,9 +73,9 @@
 		<img src="leaf.png">
 		<boxForm>
 			<form name="form1"  METHOD="post" ACTION="bemvindo.php">
-				<input id="login" type="text" name="login" size="25" placeholder = "Login">
-				<input id="senha" type="password" name="senha" size="25" placeholder = "Senha">
-				<button id="submitButton" type="submit" value="click">Logar</button>
+				<input class="btn btn-default" id="login" type="text" name="login" size="25" placeholder = "Login">
+				<input class="btn btn-default" id="senha" type="password" name="senha" size="25" placeholder = "Senha"></br>
+				<button class="btn btn-default" id="submitButton" type="submit" value="click">Logar</button>
 			</form>
 		</boxForm>
 	</boxTitle>

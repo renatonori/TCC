@@ -24,7 +24,7 @@ function showRemoveEditaCultura(data,index){
 function mostrarNaTela(index){
 			jQuery.ajax({
 				type: "POST",
-				url: "addCultura.php",
+				url: "mostrarCultura.php",
 				data: 'index=' + index,
 				success: function(data)
 				{
@@ -41,40 +41,57 @@ function deletaOuRemove(buttonName,index){
 				data: 'index=' + index,
 				success: function(data)
 				{
-					var JSONObject = JSON.parse(data);	
-					
+					if(data == "Cultura deletada com sucesso"){
+						hideRemoveEditaCultura();
+						window.location.reload();
+					}
+					alert(data);
 				}
 			});
-		}else{
-			// jQuery.ajax({
-			// 	type: "POST",
-			// 	url: "editarCultura.php",
-			// 	data: 'index=' + index,
-			// 	success: function(data)
-			// 	{
-			// 		alert(data);	
-			// 	}
-			// });
 		}
 
 }
 
 jQuery(document).ready(function(){
-	jQuery('#ajax_form').submit(function(){
+	jQuery('#adicionarForm').submit(function(){
 		var dados = jQuery( this ).serialize();
 		jQuery.ajax({
 			type: "POST",
-			url: "addCultura.php",
+			url: "adicionarCultura.php",
 			data: dados,
 			success: function(data)
 			{
 				//alert(data);
-				$("span").text("That was div index #" + data);	
+				if(data == "Cultura adicionada com êxito"){
+					hideAdicionar();
+					window.location.reload();
+				}
+					
+				alert(data);
 			}
 		});
 		
 		return false;
 	});
+
+	$('#removeEditaForm').submit(function() { 
+		var dados = jQuery( this ).serialize();
+		jQuery.ajax({
+			type: "POST",
+			url: "editarCultura.php",
+			data: dados,
+			success: function(data)
+			{
+				if(data == "Cultura alterado com sucesso" || data == " Cultura alterado com sucesso"){
+					hideRemoveEditaCultura();
+					window.location.reload();
+				}
+				alert(data);
+			}
+		});
+		
+		return false;
+	}); 
 });
 $('div').click(function(){
 	var index = $('div').index(this);

@@ -17,9 +17,9 @@ ini_set(“display_errors”, 0 );
 
 	if (!$conexao) 
 	{
- 			print '<script type="text/javascript">'; 
-			print 'alert("Erro ao deletar cultura")'; 
-			print '</script>';  
+
+			echo "Erro ao deletar cultura"; 
+
 	}else{
 		$sql = "SELECT COUNT(nome)
 		FROM cultura as time_delta";
@@ -32,14 +32,14 @@ ini_set(“display_errors”, 0 );
 		$sql = "DELETE FROM  `cultura` WHERE  `index` = '$index' "; 
 		mysql_query($sql,$conexao) or die(mysql_error()) ;
 		if(mysql_affected_rows() != -1){
-	        print '<script type="text/javascript">'; 
-			print 'alert("Cultura deletada com sucesso")'; 
-			print '</script>';  
+
+			echo "Cultura deletada com sucesso"; 
+
 	    }
 	    else{
-	       	print '<script type="text/javascript">'; 
-			print 'alert("Erro ao deletar cultura")'; 
-			print '</script>';  
+
+			echo "Erro ao deletar cultura"; 
+
 	    }
 	}
 ?>
